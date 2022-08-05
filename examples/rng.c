@@ -21,8 +21,8 @@ void application_entry(void *arg)
 {
     u32 random = 0;
 
-    //    Delay_Init();
-    //    USART_Printf_Init(115200);
+    // Delay_Init();
+    // USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
 
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_RNG, ENABLE);

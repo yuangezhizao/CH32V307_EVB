@@ -1,5 +1,6 @@
 #include "sdio.h"
 #include "lcd.h"
+//#include "pic.h"
 
 u8 buf[512];
 u8 Readbuf[512];
@@ -86,9 +87,87 @@ void SD_Card_test(void)
     }
 }
 
+void my_SD_Card(void)
+{
+    u32 Sector_Nums;
+
+    while (SD_Init())
+    {
+        printf("SD Card Error!\r\n");
+        delay_ms(1000);
+    }
+
+    // if (SD_InitializeCards())
+    // {
+    //     printf("SD_InitializeCards fail\r\n");
+    // }
+    // else
+    // {
+    //     printf("SD Card Initialize OK\r\n");
+    // }
+
+    show_sdcard_info();
+
+    printf("SD Card OK\r\n");
+    Sector_Nums = ((u32)(SDCardInfo.CardCapacity >> 20)) / 2;
+    printf("Sector_Nums:%d\r\n", Sector_Nums);
+
+    // u8 pic_num = 1;
+    // u16 each_sector;
+    // u32 current_sector;
+
+    // for (current_sector = pic_num * (115200 / 512); current_sector < (pic_num + 1) * (115200 / 512); current_sector++)
+    // {
+    //     for (each_sector = 0; each_sector < 512; each_sector++)
+    //     {
+    //         buf[each_sector] = gImage_1[current_sector * 512 + each_sector];
+    //         //            printf("each_sector=%d, gImage_1=%d\r\n", each_sector, current_sector *  512 + each_sector);
+    //     }
+    //     if (SD_WriteDisk(buf, current_sector, 1))
+    //     {
+    //         printf("SD_WriteDisk error\r\n");
+    //     }
+    //     printf("pic_num=%d, current_sector=%d\r\n", pic_num, current_sector);
+    // }
+
+    // printf("SD Finish\r\n");
+    // LCD_ShowPicture(0, 0, 240, 240, gImage_1);
+    // printf("LCD_ShowPicture Finish\r\n");
+
+    u8 pic_num = 0;
+    u16 each_sector;
+    u32 current_sector;
+    u32 image_offset = 0;
+
+    unsigned char image_1[115200] = {};
+
+    for (current_sector = pic_num * (115200 / 512); current_sector < (pic_num + 1) * (115200 / 512); current_sector++)
+    {
+        if (SD_ReadDisk(buf, current_sector, 1))
+        {
+            printf("SD_ReadDisk error\r\n");
+        }
+        for (each_sector = 0; each_sector < 512; each_sector++)
+        {
+            image_1[image_offset] = buf[each_sector];
+            //            printf("each_sector=%d, image_offset=%d\r\n", each_sector, image_offset);
+            image_offset++;
+        }
+        printf("pic_num=%d, current_sector=%d, image_offset=%d\r\n", pic_num, current_sector, image_offset);
+    }
+
+    printf("SD Finish\r\n");
+    LCD_ShowPicture(0, 0, 240, 240, image_1);
+    printf("LCD_ShowPicture Finish\r\n");
+
+    while (1)
+    {
+    }
+}
+
 void application_entry(void *arg)
 {
-    SD_Card_test();
+    my_SD_Card();
     while (1)
     {
     }

@@ -42,7 +42,7 @@ __API__ k_err_t tos_knl_init(void)
     }
 
 #if TOS_CFG_TIMER_EN > 0
-    err = timer_init();
+    err = soft_timer_init();
     if (err != K_ERR_NONE) {
         return err;
     }
@@ -160,7 +160,6 @@ __API__ k_err_t tos_knl_start(void)
     k_curr_task = k_next_task;
     k_knl_state = KNL_STATE_RUNNING;
 
-//    printf("start\r\n");
     cpu_sched_start();
 
     return K_ERR_NONE;
@@ -188,7 +187,7 @@ __KNL__ k_tick_t knl_next_expires_get(void)
     tick_next_expires = tick_next_expires_get();
 
 #if TOS_CFG_TIMER_EN > 0u
-    timer_next_expires = timer_next_expires_get();
+    timer_next_expires = soft_timer_next_expires_get();
 #endif
 
 #if TOS_CFG_TIMER_EN > 0u

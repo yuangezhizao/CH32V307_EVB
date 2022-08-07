@@ -86,7 +86,7 @@ struct k_task_st {
     k_stack_t          *stk_base;               /**< task stack base address */
     size_t              stk_size;               /**< stack size of the task */
 
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     k_list_t            dead_list;              /**< when a dynamic allocated task destroyed, we hook the task's dead_list to the k_dead_task_list */
 #endif
 
@@ -154,7 +154,7 @@ struct k_task_st {
  * @retval  #K_ERR_NONE                     return successfully.
  */
 __API__ k_err_t tos_task_create(k_task_t *task,
-                                            char *name,
+                                            const char *name,
                                             k_task_entry_t entry,
                                             void *arg,
                                             k_prio_t prio,
@@ -176,7 +176,7 @@ __API__ k_err_t tos_task_create(k_task_t *task,
  */
 __API__ k_err_t tos_task_destroy(k_task_t *task);
 
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
 
 /**
  * @brief Create a task with a dynamic allocated task handler and stack.
@@ -197,12 +197,26 @@ __API__ k_err_t tos_task_destroy(k_task_t *task);
  * @retval  #K_ERR_NONE                     return successfully.
  */
 __API__ k_err_t tos_task_create_dyn(k_task_t **task,
-                                                    char *name,
+                                                    const char *name,
                                                     k_task_entry_t entry,
                                                     void *arg,
                                                     k_prio_t prio,
                                                     size_t stk_size,
                                                     k_timeslice_t timeslice);
+
+/**
+ * @brief Destroy a dynamic allocated task.
+ * delete a dynamic allocated task.
+ *
+ * @attention None
+ *
+ * @param[in]   task        pointer to the handler of the task to be deleted.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_TASK_DESTROY_IDLE    attempt to destroy idle task.
+ * @retval  #K_ERR_NONE                 return successfully.
+ */
+__API__ k_err_t tos_task_destroy_dyn(k_task_t *task);
 
 #endif
 
@@ -302,6 +316,15 @@ __API__ void    tos_task_yield(void);
  */
 __API__ k_task_t *tos_task_curr_task_get(void);
 
+/**
+ * @brief Find task by task name.
+ * Find task by task name.
+ *
+ * @param   name    the name of the task.
+ *
+ * @return  the matched task handler
+ */
+__API__ k_task_t *tos_task_find(const char *name);
 
 #if TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN > 0u
 

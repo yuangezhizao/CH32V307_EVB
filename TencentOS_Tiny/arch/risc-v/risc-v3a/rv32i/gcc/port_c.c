@@ -19,29 +19,6 @@
 #include "ch32v30x.h"
 #include "core_riscv.h"
 
-
-__PORT__ void port_int_disable(void)
-{
-    asm("csrw mstatus, %0" : :"r"(0x7800));
-}
-
-__PORT__ void port_int_enable(void)
-{
-    asm("csrw mstatus, %0" : :"r"(0x7888));
-}
-
-__PORT__ cpu_cpsr_t port_cpsr_save(void)
-{
-    cpu_cpsr_t value=0;
-    asm("csrrw %0, mstatus, %1":"=r"(value):"r"(0x7800));
-    return value;
-}
-__PORT__ void port_cpsr_restore(cpu_cpsr_t cpsr)
-{
-  asm("csrw mstatus, %0": :"r"(cpsr));
-}
-
-
 __PORT__ void port_cpu_reset(void)
 {
     NVIC_SystemReset();
@@ -90,7 +67,7 @@ __PORT__ void port_cpu_init()
 void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void SysTick_Handler(void)
 {
-    GET_INT_SP();   /* ÇÐ»»ÖÐ¶ÏÕ» */
+    GET_INT_SP();  /* ÇÐ»»ÖÐ¶ÏÕ» */
     if (tos_knl_is_running())
     {
       tos_knl_irq_enter();
@@ -100,6 +77,7 @@ void SysTick_Handler(void)
     }
     FREE_INT_SP(); /* ÊÍ·ÅÖÐ¶ÏÕ» */
 }
+
 
 
 #if TOS_CFG_TICKLESS_EN > 0u

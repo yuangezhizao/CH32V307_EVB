@@ -15,12 +15,41 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
  #include "port_config.h"
+.global port_int_disable
+.global port_int_enable
 
+.global port_cpsr_save
+.global port_cpsr_restore
 .global port_sched_start
+
 .extern k_curr_task
 .extern k_next_task
 
+
 .text
+.align 2
+.type port_int_disable, %function
+port_int_disable:
+    csrci   mstatus, 0x8
+    ret
+
+.type port_int_enable, %function
+port_int_enable:
+    csrsi   mstatus, 0x8
+    ret
+
+.type port_cpsr_save, %function
+port_cpsr_save:
+    csrrci  a0, mstatus, 0x8
+    ret
+
+.type port_cpsr_restore, %function
+port_cpsr_restore:
+    csrw    mstatus, a0
+    ret
+
+
+
 .align 2
 .type port_sched_start, %function
 port_sched_start:

@@ -1,6 +1,6 @@
 #include "tos_k.h"
 
-void init_e53_sc1_light(void)
+extern void init_e53_sc1_light(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
@@ -10,14 +10,14 @@ void init_e53_sc1_light(void)
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
 
-void application_entry(void *arg)
-{
-    init_e53_sc1_light();
-    while (1)
-    {
-        GPIO_SetBits(GPIOC, GPIO_Pin_10);
-        Delay_Ms(1000);
-        GPIO_ResetBits(GPIOC, GPIO_Pin_10);
-        Delay_Ms(1000);
-    }
-}
+// void application_entry(void *arg)
+// {
+//     init_e53_sc1_light();
+//     while (1)
+//     {
+//         GPIO_SetBits(GPIOC, GPIO_Pin_10);
+//         Delay_Ms(1000);
+//         GPIO_ResetBits(GPIOC, GPIO_Pin_10);
+//         Delay_Ms(1000);
+//     }
+// }

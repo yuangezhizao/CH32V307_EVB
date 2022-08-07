@@ -74,10 +74,12 @@ void spi_flash_test(void)
     if (memcmp(TEXT_Buf, datap, SIZE))
     {
         LCD_ShowString(16, 16 + 16 + 16, "SPI Flash: Fail", WHITE, BLACK, 16, 0);
+        printf("SPI Flash: Fail\r\n");
     }
     else
     {
         LCD_ShowString(16, 16 + 16 + 16, "SPI Flash: OK", WHITE, BLACK, 16, 0);
+        printf("SPI Flash: OK\r\n");
     }
 }
 

@@ -22,7 +22,8 @@ void application_entry(void *arg)
     //         LCD_ShowPicture(40 * i, 120 + j * 40, 40, 40, gImage_1);
     //     }
     // }
-    LCD_ShowPicture(0, 0, 240, 240, gImage_1);
+    LCD_ShowPicture(0, 0, 120, 120, gImage_0);
+    LCD_ShowPicture(120, 0, 120, 120, gImage_1);
 
     printf("lcd test finish\r\n");
     while (1)

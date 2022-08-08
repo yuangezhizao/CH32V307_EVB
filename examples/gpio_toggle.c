@@ -49,8 +49,11 @@ void application_entry(void *arg)
     printf("SystemClk:%d\r\n", SystemCoreClock);
 
     printf("GPIO Toggle TEST\r\n");
-    EXTI0_INT_INIT();
+    //    EXTI0_INT_INIT();
+
     GPIO_Toggle_INIT();
+    TIM6_Init(5000 - 1, 14400 - 1);
+    TIM6_INT_INIT();
 
     while (1)
     {

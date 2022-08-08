@@ -17,6 +17,7 @@ void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART7_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void EXTI0_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void TIM6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 /*******************************************************************************
  * Function Name  : NMI_Handler
@@ -113,6 +114,16 @@ void EXTI0_IRQHandler(void)
 
 #endif
     EXTI_ClearITPendingBit(EXTI_Line0); /* Clear Flag */
+    User_LED_1_Status = !User_LED_1_Status;
+    GPIO_WriteBit(GPIOE, GPIO_Pin_2, User_LED_1_Status);
+  }
+}
+
+void TIM6_IRQHandler(void)
+{
+  if (TIM_GetITStatus(TIM6, TIM_FLAG_Update) != RESET)
+  {
+    TIM_ClearITPendingBit(TIM6, TIM_FLAG_Update); /* Clear Flag */
     User_LED_1_Status = !User_LED_1_Status;
     GPIO_WriteBit(GPIOE, GPIO_Pin_2, User_LED_1_Status);
   }

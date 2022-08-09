@@ -1,5 +1,5 @@
-#ifndef __WS2812_H
-#define __WS2812_H
+#ifndef __WS2812_SPI_H
+#define __WS2812_SPI_H
 
 //#include "stm32f10x.h"
 #include "debug.h"
@@ -41,5 +41,6 @@ void ws281x_theaterChase(uint32_t c, uint8_t wait);
 void ws281x_colorWipe(uint32_t c, uint8_t wait);
 void ws281x_rainbow(uint8_t wait);
 void ws281x_theaterChaseRainbow(uint8_t wait);
+uint32_t ColorHSV(uint16_t hue, uint8_t sat, uint8_t val);
 
-#endif /* __WS2812_H */
+#endif /* __WS2812_SPI_H */

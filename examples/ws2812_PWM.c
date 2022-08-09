@@ -1,29 +1,23 @@
-//#include "led.h"
-//#include "delay.h"
-//#include "key.h"
-//#include "sys.h"
-//#include "usart.h"
-#include "ws2812.h"
-
-int8_t i;
+#include <ws2812_PWM.h>
 
 void application_entry(void *arg)
 {
     // uart_init(115200);
     // delay_init();
-    ws281x_init();
+    WS281x_Init();
     printf("SystemClk:%d\r\n", SystemCoreClock);
+
     while (1)
     {
-        ws281x_colorWipe(ws281x_color(255, 0, 0), 50); // Red
+        WS281x_ColorWipe(WS281x_Color(255, 0, 0), 50); // Red
         Delay_Ms(1000);
-        ws281x_colorWipe(ws281x_color(0, 255, 0), 50); // Green
+        WS281x_ColorWipe(WS281x_Color(0, 255, 0), 50); // Green
         Delay_Ms(1000);
-        ws281x_colorWipe(ws281x_color(200, 255, 0), 50); //黄色
+        WS281x_ColorWipe(WS281x_Color(200, 255, 0), 50); //黄色
         Delay_Ms(1000);
-        ws281x_colorWipe(ws281x_color(100, 255, 50), 50); //冰蓝
+        WS281x_ColorWipe(WS281x_Color(100, 255, 50), 50); //冰蓝
         Delay_Ms(1000);
-        ws281x_colorWipe(ws281x_color(155, 255, 0), 50); //嫩绿色
+        WS281x_ColorWipe(WS281x_Color(155, 255, 0), 50); //嫩绿色
         Delay_Ms(1000);
 
         // for (i = 0; i < PIXEL_NUM; ++i)

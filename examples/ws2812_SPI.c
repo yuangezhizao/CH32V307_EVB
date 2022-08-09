@@ -1,6 +1,6 @@
-#include <ws2812_SPI.h>
+#include "ws2812_SPI.h"
 
-//int8_t i;
+// int8_t i;
 
 extern void ws2812_spi(void)
 {

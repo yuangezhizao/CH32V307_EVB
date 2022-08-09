@@ -1,32 +1,33 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2021/06/06
- * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
-
-/*
- *@Note
- GPIO例程：
- PE2推挽输出。
-*/
-
 #include "debug.h"
 
-/* Global define */
+extern void TIM6_Init(u16 arr, u16 psc)
+{
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 
-/* Global Variable */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
 
-/*********************************************************************
- * @fn      GPIO_Toggle_INIT
- *
- * @brief   Initializes GPIOA.0
- *
- * @return  none
- */
+    TIM_TimeBaseInitStructure.TIM_Period = arr;
+    TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
+    TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Down;
+    TIM_TimeBaseInit(TIM6, &TIM_TimeBaseInitStructure);
+
+    TIM_ITConfig(TIM6, TIM_IT_Update, ENABLE);
+    TIM_ARRPreloadConfig(TIM6, ENABLE);
+    TIM_Cmd(TIM6, ENABLE);
+}
+
+void TIM6_INT_INIT(void)
+{
+    NVIC_InitTypeDef NVIC_InitStructure = {0};
+
+    NVIC_InitStructure.NVIC_IRQChannel = TIM6_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+}
+
 void GPIO_Toggle_INIT(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
@@ -40,24 +41,9 @@ void GPIO_Toggle_INIT(void)
 
 extern void gpio_toggle(void *arg)
 {
-    //    u8 i = 0;
-
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-    //    Delay_Init();
-    //    USART_Printf_Init(115200);
-//    printf("SystemClk:%d\r\n", SystemCoreClock);
-
-//    printf("GPIO Toggle TEST\r\n");
-    //    EXTI0_INT_INIT();
-
     GPIO_Toggle_INIT();
     TIM6_Init(5000 - 1, 14400 - 1);
     TIM6_INT_INIT();
 
-//    while (1)
-//    {
-//        //        Delay_Ms(250);
-//        //        GPIO_WriteBit(GPIOA, GPIO_Pin_2, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
-//    }
     printf("gpio_toggle finish\r\n");
 }

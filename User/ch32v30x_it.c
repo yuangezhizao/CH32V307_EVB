@@ -17,6 +17,8 @@ void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART7_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void EXTI0_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void EXTI1_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void EXTI8_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void TIM6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 /*******************************************************************************
@@ -105,6 +107,10 @@ void UART7_IRQHandler(void)
  */
 
 volatile uint16_t User_LED_1_Status = 0;
+volatile uint16_t User_LED_2_Status = 0;
+volatile uint16_t User_LED_3_Status = 0;
+//volatile uint16_t User_LED_4_Status = 0;
+
 void EXTI0_IRQHandler(void)
 {
   if (EXTI_GetITStatus(EXTI_Line0) != RESET)
@@ -114,10 +120,38 @@ void EXTI0_IRQHandler(void)
 
 #endif
     EXTI_ClearITPendingBit(EXTI_Line0); /* Clear Flag */
-    User_LED_1_Status = !User_LED_1_Status;
-    GPIO_WriteBit(GPIOE, GPIO_Pin_2, User_LED_1_Status);
+    User_LED_2_Status = !User_LED_2_Status;
+    GPIO_WriteBit(GPIOE, GPIO_Pin_3, User_LED_2_Status);
   }
 }
+
+void EXTI1_IRQHandler(void)
+{
+  if (EXTI_GetITStatus(EXTI_Line1) != RESET)
+  {
+#if 0
+    printf("Run at EXTI\r\n");
+
+#endif
+    EXTI_ClearITPendingBit(EXTI_Line1); /* Clear Flag */
+    User_LED_3_Status = !User_LED_3_Status;
+    GPIO_WriteBit(GPIOE, GPIO_Pin_4, User_LED_3_Status);
+  }
+}
+
+//void EXTI8_IRQHandler(void)
+//{
+//  if (EXTI_GetITStatus(EXTI_Line8) != RESET)
+//  {
+//#if 0
+//    printf("Run at EXTI\r\n");
+//
+//#endif
+//    EXTI_ClearITPendingBit(EXTI_Line8); /* Clear Flag */
+//    User_LED_4_Status = !User_LED_4_Status;
+//    GPIO_WriteBit(GPIOE, GPIO_Pin_5, User_LED_4_Status);
+//  }
+//}
 
 void TIM6_IRQHandler(void)
 {

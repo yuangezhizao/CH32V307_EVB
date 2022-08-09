@@ -20,9 +20,9 @@ void mqtt_task_entry(void *arg)
 
 void application_entry(void *arg)
 {
-    lcd_show_image();
-    EXTI0_INT_INIT();
+    exti_int_init();
     gpio_toggle();
+    lcd_show_image();
 
     tos_task_create(&task1, "task1", ws2812_spi_entry, NULL, 3, task1_stk, TASK1_STK_SIZE, 0); // Create task1
     tos_task_create(&task2, "task2", mqtt_task_entry, NULL, 3, task2_stk, TASK2_STK_SIZE, 0);  // Create task2

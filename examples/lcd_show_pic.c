@@ -1,7 +1,7 @@
-#include "tos_k.h"
+#include "debug.h"
 #include "pic.h"
 
-void application_entry(void *arg)
+extern void lcd_show_image(void *arg)
 {
     // u8 i, j;
     // float t = 0;
@@ -25,8 +25,5 @@ void application_entry(void *arg)
     LCD_ShowPicture(0, 0, 120, 120, gImage_0);
     LCD_ShowPicture(120, 0, 120, 120, gImage_1);
 
-    printf("lcd test finish\r\n");
-    while (1)
-    {
-    }
+    printf("lcd_show_image finish\r\n");
 }

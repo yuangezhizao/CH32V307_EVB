@@ -1,18 +1,10 @@
-//#include "led.h"
-//#include "delay.h"
-//#include "key.h"
-//#include "sys.h"
-//#include "usart.h"
 #include <ws2812_SPI.h>
 
-int8_t i;
+//int8_t i;
 
-void application_entry(void *arg)
+extern void ws2812_spi(void)
 {
-    // uart_init(115200);
-    // delay_init();
     ws281x_init();
-    printf("SystemClk:%d\r\n", SystemCoreClock);
     while (1)
     {
         ws281x_colorWipe(ws281x_color(255, 0, 0), 50); // Red

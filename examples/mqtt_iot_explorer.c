@@ -192,7 +192,7 @@ static void default_message_handler(mqtt_message_t *msg)
 //     printf("---------------------------------------------------------\r\n");
 // }
 
-void mqtt_demo_task(void)
+extern void mqtt_demo_task(void)
 {
     int ret = 0;
     int size = 0;
@@ -365,13 +365,13 @@ void mqtt_demo_task(void)
     }
 }
 
-void application_entry(void *arg)
-{
-    init_e53_sc1_light();
-    mqtt_demo_task();
-    while (1)
-    {
-        printf("This is a mqtt demo!\r\n");
-        tos_task_delay(1000);
-    }
-}
+//void application_entry(void *arg)
+//{
+//    init_e53_sc1_light();
+//    mqtt_demo_task();
+//    while (1)
+//    {
+//        printf("This is a mqtt demo!\r\n");
+//        tos_task_delay(1000);
+//    }
+//}

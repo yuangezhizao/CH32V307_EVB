@@ -14,8 +14,7 @@
  PE2推挽输出。
 */
 
-//#include "debug.h"
-#include "tos_k.h"
+#include "debug.h"
 
 /* Global define */
 
@@ -39,25 +38,26 @@ void GPIO_Toggle_INIT(void)
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 }
 
-void application_entry(void *arg)
+extern void gpio_toggle(void *arg)
 {
     //    u8 i = 0;
 
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     //    Delay_Init();
     //    USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+//    printf("SystemClk:%d\r\n", SystemCoreClock);
 
-    printf("GPIO Toggle TEST\r\n");
+//    printf("GPIO Toggle TEST\r\n");
     //    EXTI0_INT_INIT();
 
     GPIO_Toggle_INIT();
     TIM6_Init(5000 - 1, 14400 - 1);
     TIM6_INT_INIT();
 
-    while (1)
-    {
-        //        Delay_Ms(250);
-        //        GPIO_WriteBit(GPIOA, GPIO_Pin_2, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
-    }
+//    while (1)
+//    {
+//        //        Delay_Ms(250);
+//        //        GPIO_WriteBit(GPIOA, GPIO_Pin_2, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
+//    }
+    printf("gpio_toggle finish\r\n");
 }

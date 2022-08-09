@@ -4,20 +4,20 @@ void application_entry(void *arg)
 {
     // uart_init(115200);
     // delay_init();
-    WS281x_Init();
+    ws281x_init();
     printf("SystemClk:%d\r\n", SystemCoreClock);
 
     while (1)
     {
-        WS281x_ColorWipe(WS281x_Color(255, 0, 0), 50); // Red
+        ws281x_colorWipe(ws281x_color(255, 0, 0), 50); // Red
         Delay_Ms(1000);
-        WS281x_ColorWipe(WS281x_Color(0, 255, 0), 50); // Green
+        ws281x_colorWipe(ws281x_color(0, 255, 0), 50); // Green
         Delay_Ms(1000);
-        WS281x_ColorWipe(WS281x_Color(200, 255, 0), 50); //黄色
+        ws281x_colorWipe(ws281x_color(200, 255, 0), 50); //黄色
         Delay_Ms(1000);
-        WS281x_ColorWipe(WS281x_Color(100, 255, 50), 50); //冰蓝
+        ws281x_colorWipe(ws281x_color(100, 255, 50), 50); //冰蓝
         Delay_Ms(1000);
-        WS281x_ColorWipe(WS281x_Color(155, 255, 0), 50); //嫩绿色
+        ws281x_colorWipe(ws281x_color(155, 255, 0), 50); //嫩绿色
         Delay_Ms(1000);
 
         // for (i = 0; i < PIXEL_NUM; ++i)

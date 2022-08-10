@@ -333,9 +333,8 @@ void lcd_show_RTC()
 {
     while (1)
     {
-        sprintf(rtc_all, "%d-%d-%d %d:%d:%d", calendar.w_year, calendar.w_month, calendar.w_date, calendar.hour, calendar.min, calendar.sec);
-        LCD_ShowString(12, 120, rtc_all, GREEN, BLACK, 24, 0);
-        LCD_ShowString(12, 240-24, "yuangezhizao 2022", BLUE, BLACK, 24, 0);
+        sprintf(rtc_all, "%04d-%02d-%02d %02d:%02d:%02d", calendar.w_year, calendar.w_month, calendar.w_date, calendar.hour, calendar.min, calendar.sec);
+        LCD_ShowString(0, 120, rtc_all, GREEN, BLACK, 24, 0);
         tos_sleep_ms(500);
     }
 }

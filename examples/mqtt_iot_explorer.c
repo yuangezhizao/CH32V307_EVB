@@ -38,8 +38,11 @@ static bool is_client_token_received = false;
 
 int bedroom_light_switch_cache = 0;
 int sunset_light_switch_cache = 0;
+int rgb_light_type_cache = 0;
 int brightness_level_cache = 2;
 char client_token_cache[128] = {0};
+
+extern rgb_data_msg_q;
 
 // /***************************************************************
 // * 函数名称: key1_handler_callback
@@ -108,6 +111,35 @@ static void iot_explorer_handle_sunset_light_switch(int sunset_light_switch)
     }
 }
 
+static void iot_explorer_handle_rgb_light_type(int rgb_light_type)
+{
+    rgb_light_type_cache = rgb_light_type;
+    if (rgb_light_type == 0){
+        char *msg_to_one_receiver = "color_wipe";
+        tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
+    }
+    else if (rgb_light_type == 1) {
+        char *msg_to_one_receiver = "theater_chase";
+        tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
+    }
+    else if (rgb_light_type == 2) {
+        char *msg_to_one_receiver = "rainbow";
+        tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
+    }
+    else if (rgb_light_type == 3) {
+        char *msg_to_one_receiver = "rainbow_cycle";
+        tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
+    }
+    else if (rgb_light_type == 4) {
+        char *msg_to_one_receiver = "theater_chase_rain";
+        tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
+    }
+    else{
+        printf("Unknown type\r\n");
+    }
+    is_bedroom_light_switch_changed = true;
+}
+
 /***************************************************************
  * 函数名称: default_message_handler
  * 说    明: IoT Explorer下行数据处理
@@ -120,7 +152,7 @@ static void default_message_handler(mqtt_message_t *msg)
     cJSON *method;
     cJSON *bedroom_light_switch;
     cJSON *sunset_light_switch;
-    cJSON *RGB_color;
+    cJSON *rgb_light_type;
     cJSON *RGB_brightness;
 
     printf("callback:\r\n");
@@ -175,6 +207,13 @@ static void default_message_handler(mqtt_message_t *msg)
     if (bedroom_light_switch)
     {
         iot_explorer_handle_bedroom_light_switch(bedroom_light_switch->valueint);
+    }
+
+    // 2. rgb_light_type
+    rgb_light_type = cJSON_GetObjectItem(params, "rgb_light_type");
+    if (rgb_light_type)
+    {
+        iot_explorer_handle_rgb_light_type(rgb_light_type->valueint);
     }
 
     RGB_brightness = cJSON_GetObjectItem(params, "RGB_brightness");

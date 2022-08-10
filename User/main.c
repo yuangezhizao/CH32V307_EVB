@@ -68,10 +68,14 @@ int main(void)
     printf("SystemClk:%d\r\n", SystemCoreClock);
     led_key_init();
     LCD_Init();
-    //    SPI_Flash_Init();
+    SPI_Flash_Init();
     printf("Welcome to TencentOS tiny(%s)\r\n", TOS_VERSION);
     LCD_Fill(0, 0, LCD_W, LCD_H, BLACK);
-    LCD_ShowString(0, 0, "Welcome to TencentOS", WHITE, BLACK, 16, 0);
+    //    LCD_ShowString(0, 0, "Welcome to TencentOS", WHITE, BLACK, 16, 0);
+
+    LCD_ShowString(0, 120 + 24, "RGB Type: ", BRRED, BLACK, 16, 0);
+    LCD_ShowString(16 * 5, 120 + 24, "Unavailable", WHITE, BLACK, 16, 0);
+    LCD_ShowString(12, 240 - 24, "yuangezhizao 2022", BLUE, BLACK, 24, 0);
 
     tos_knl_init();
     tos_task_create(&application_task, "application_task", application_entry, NULL, 4, application_task_stk, APPLICATION_TASK_STK_SIZE, 0);
@@ -88,9 +92,7 @@ int main(void)
     case 1:
         break;
     case 2:
-        //            LCD_ShowPicture(0,0,240,240,read_pic_from_sd(1));
-        //            LCD_Fill(0,0,LCD_W,LCD_H,BLACK);
-        //                spi_flash_test();
+        spi_flash_test();
         break;
     case 3:
         LCD_Fill(0, 0, LCD_W, LCD_H, BLACK);

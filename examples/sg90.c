@@ -1,9 +1,10 @@
 #include "tos_k.h"
+#include "debug.h"
 
 #define ARR 200 - 1
 #define PSC 14400 - 1
 
-void init_TIM4_PWMOut(void)
+void TIM4_PWMOut_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
@@ -35,24 +36,49 @@ void init_TIM4_PWMOut(void)
     TIM_Cmd(TIM4, ENABLE);                             //使能TIM1
 }
 
-void application_entry(void *arg)
+extern void sg90_init()
 {
-    init_TIM4_PWMOut();
-    while (1)
-    {
-        TIM_SetCompare1(TIM4, 195); // 0度
-        Delay_Ms(1000);
-
-        TIM_SetCompare1(TIM4, 190); // 45度
-        Delay_Ms(1000);
-
-        TIM_SetCompare1(TIM4, 185); // 90度
-        Delay_Ms(1000);
-
-        TIM_SetCompare1(TIM4, 180); // 135度
-        Delay_Ms(1000);
-
-        TIM_SetCompare1(TIM4, 175); // 180度
-        Delay_Ms(1000);
-    }
+    TIM4_PWMOut_init();
 }
+
+extern void turn_on_bedroom_light()
+{
+    TIM_SetCompare1(TIM4, 188);
+    Delay_Ms(500);
+    TIM_SetCompare1(TIM4, 185); // 90度
+}
+
+extern void turn_off_bedroom_light()
+{
+
+    TIM_SetCompare1(TIM4, 182);
+    Delay_Ms(500);
+    TIM_SetCompare1(TIM4, 185); // 90度
+}
+
+// void application_entry(void *arg)
+//{
+//     sg90_init();
+//     while (1)
+//     {
+//         printf("195");
+//         TIM_SetCompare1(TIM4, 195); // 0度
+//         Delay_Ms(1000);
+//
+//         printf("190");
+//         TIM_SetCompare1(TIM4, 190); // 45度
+//         Delay_Ms(1000);
+//
+//         printf("185");
+//         TIM_SetCompare1(TIM4, 185); // 90度
+//         Delay_Ms(1000);
+//
+//         printf("180");
+//         TIM_SetCompare1(TIM4, 180); // 135度
+//         Delay_Ms(1000);
+//
+//         printf("175");
+//         TIM_SetCompare1(TIM4, 175); // 180度
+//         Delay_Ms(1000);
+//     }
+// }

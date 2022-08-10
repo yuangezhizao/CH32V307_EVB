@@ -122,6 +122,11 @@ void EXTI0_IRQHandler(void)
     EXTI_ClearITPendingBit(EXTI_Line0); /* Clear Flag */
     User_LED_2_Status = !User_LED_2_Status;
     GPIO_WriteBit(GPIOE, GPIO_Pin_3, User_LED_2_Status);
+    if (User_LED_2_Status == 0){
+        turn_on_bedroom_light();
+    } else{
+        turn_off_bedroom_light();
+    }
   }
 }
 

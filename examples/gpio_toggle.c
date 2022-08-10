@@ -39,7 +39,7 @@ void GPIO_Toggle_INIT(void)
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 }
 
-extern void gpio_toggle(void *arg)
+extern void user_led_1_toggle(void *arg)
 {
     GPIO_Toggle_INIT();
     TIM6_Init(5000 - 1, 14400 - 1);

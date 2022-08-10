@@ -55,7 +55,8 @@ void ws281x_init(void)
   DMA_Init(DMA1_Channel5, &DMA_InitStructure);  //根据DMA_InitStruct中指定的参数初始化DMA的通道USART1_Tx_DMA_Channel所标识的寄存器
 
   ws281x_closeAll(); //关闭全部的灯
-  Delay_Ms(100);     //关闭全部的灯需要一定的时间
+//  Delay_Ms(100);     //关闭全部的灯需要一定的时间
+  tos_sleep_ms(100);
 }
 
 void ws281x_closeAll(void)
@@ -136,7 +137,8 @@ void ws281x_colorWipe(uint32_t c, uint8_t wait)
   {
     ws281x_setPixelColor(i, c);
     ws281x_show();
-    Delay_Ms(wait);
+//    Delay_Ms(wait);
+    tos_sleep_ms(wait);
   }
 }
 
@@ -151,7 +153,8 @@ void ws281x_rainbow(uint8_t wait)
       ws281x_setPixelColor(i, ws281x_wheel((i + j) & 255));
     }
     ws281x_show();
-    Delay_Ms(wait);
+//    Delay_Ms(wait);
+    tos_sleep_ms(wait);
   }
 }
 
@@ -167,7 +170,8 @@ void ws281x_rainbowCycle(uint8_t wait)
       ws281x_setPixelColor(i, ws281x_wheel(((i * 256 / PIXEL_NUM) + j) & 255));
     }
     ws281x_show();
-    Delay_Ms(wait);
+//    Delay_Ms(wait);
+    tos_sleep_ms(wait);
   }
 }
 
@@ -184,7 +188,8 @@ void ws281x_theaterChase(uint32_t c, uint8_t wait)
       }
       ws281x_show();
 
-      Delay_Ms(wait);
+//      Delay_Ms(wait);
+      tos_sleep_ms(wait);
 
       for (uint16_t i = 0; i < PIXEL_NUM; i = i + 3)
       {
@@ -207,7 +212,8 @@ void ws281x_theaterChaseRainbow(uint8_t wait)
       }
       ws281x_show();
 
-      Delay_Ms(wait);
+//      Delay_Ms(wait);
+      tos_sleep_ms(wait);
 
       for (uint16_t i = 0; i < PIXEL_NUM; i = i + 3)
       {

@@ -1,22 +1,6 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2021/06/06
- * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
-
-/*
- *@Note
- 日历例程：
- 本例程演示 初始时间为2019年10月8日13时58分55秒，实时计时，每隔 1S 通过串口
- 打印实时时钟值。
-*/
-
 //#include "debug.h"
 #include "tos_k.h"
+#include "lcd.h"
 
 /* Global define */
 
@@ -71,7 +55,7 @@ static void RTC_NVIC_Config(void)
  * @return  1 - Init Fail
  *          0 - Init Success
  */
-u8 RTC_Init(void)
+extern u8 RTC_Init(void)
 {
     u8 temp = 0;
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
@@ -99,7 +83,7 @@ u8 RTC_Init(void)
         RTC_EnterConfigMode();
         RTC_SetPrescaler(32767);
         RTC_WaitForLastTask();
-        RTC_Set(2022, 7, 24, 18, 15, 00); /* Setup Time */
+        RTC_Set(2022, 8, 10, 19, 19, 00); /* Setup Time */
         RTC_ExitConfigMode();
         BKP_WriteBackupRegister(BKP_DR1, 0XA1A1);
     }
@@ -324,21 +308,34 @@ u8 RTC_Get_Week(u16 year, u8 month, u8 day)
     return (temp2 % 7);
 }
 
-void application_entry(void *arg)
+// void application_entry(void *arg)
+//{
+//     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+//     Delay_Init();
+//     // USART_Printf_Init(115200);
+//     printf("SystemClk:%d\r\n", SystemCoreClock);
+//
+//     printf("RTC Test\r\n");
+//     RTC_Init();
+//
+//     while (1)
+//     {
+//         Delay_Ms(1000);
+//         printf("year/month/day/week/hour/min/sec:\r\n");
+//         printf("%d-%d-%d  %d  %d:%d:%d\r\n", calendar.w_year, calendar.w_month, calendar.w_date,
+//                calendar.week, calendar.hour, calendar.min, calendar.sec);
+//     }
+// }
+
+char rtc_all[22];
+
+extern void lcd_show_RTC()
 {
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-    Delay_Init();
-    // USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
-
-    printf("RTC Test\r\n");
-    RTC_Init();
-
     while (1)
     {
-        Delay_Ms(1000);
-        printf("year/month/day/week/hour/min/sec:\r\n");
-        printf("%d-%d-%d  %d  %d:%d:%d\r\n", calendar.w_year, calendar.w_month, calendar.w_date,
-               calendar.week, calendar.hour, calendar.min, calendar.sec);
+        sprintf(rtc_all, "%d-%d-%d %d:%d:%d", calendar.w_year, calendar.w_month, calendar.w_date, calendar.hour, calendar.min, calendar.sec);
+        LCD_ShowString(12, 120, rtc_all, GREEN, BLACK, 24, 0);
+        LCD_ShowString(12, 240-24, "yuangezhizao 2022", BLUE, BLACK, 24, 0);
+        tos_sleep_ms(500);
     }
 }

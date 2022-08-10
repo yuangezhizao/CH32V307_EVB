@@ -1,6 +1,4 @@
-#include "tos_k.h"
-
-
+#include "debug.h"
 
 extern void sunset_light_init(void)
 {
@@ -11,7 +9,6 @@ extern void sunset_light_init(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
-
 
 // void application_entry(void *arg)
 // {

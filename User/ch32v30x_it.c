@@ -20,6 +20,7 @@ void EXTI0_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void EXTI1_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 // void EXTI8_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void TIM6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void RTC_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 /*******************************************************************************
  * Function Name  : NMI_Handler
@@ -180,4 +181,28 @@ void TIM6_IRQHandler(void)
     User_LED_1_Status = !User_LED_1_Status;
     GPIO_WriteBit(GPIOE, GPIO_Pin_2, User_LED_1_Status);
   }
+}
+
+
+/*********************************************************************
+ * @fn      RTC_IRQHandler
+ *
+ * @brief   This function handles RTC Handler.
+ *
+ * @return  none
+ */
+void RTC_IRQHandler(void)
+{
+    if(RTC_GetITStatus(RTC_IT_SEC) != RESET) /* Seconds interrupt */
+    {
+        RTC_Get();
+    }
+    if(RTC_GetITStatus(RTC_IT_ALR) != RESET) /* Alarm clock interrupt */
+    {
+        RTC_ClearITPendingBit(RTC_IT_ALR);
+        RTC_Get();
+    }
+
+    RTC_ClearITPendingBit(RTC_IT_SEC | RTC_IT_OW);
+    RTC_WaitForLastTask();
 }

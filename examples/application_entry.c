@@ -41,7 +41,6 @@ void application_entry(void *arg)
     sunset_light_init();
     RTC_Init();
     user_led_1_toggle();
-    lcd_show_image();
 
     tos_msg_q_create(&rgb_data_msg_q, rgb_data_msg_pool, MESSAGE_MAX);
 

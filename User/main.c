@@ -73,9 +73,45 @@ int main(void)
     LCD_Fill(0, 0, LCD_W, LCD_H, BLACK);
     //    LCD_ShowString(0, 0, "Welcome to TencentOS", WHITE, BLACK, 16, 0);
 
-    LCD_ShowString(0, 120 + 24, "RGB Type: ", BRRED, BLACK, 16, 0);
-    LCD_ShowString(16 * 5, 120 + 24, "Unavailable", WHITE, BLACK, 16, 0);
-    LCD_ShowString(12, 240 - 24, "yuangezhizao 2022", BLUE, BLACK, 24, 0);
+    LCD_DrawLine(0, 120, 239, 121, GREEN);
+
+    LCD_DrawLine(0, 146, 80, 146, RED);
+    LCD_DrawLine(80, 146, 160, 146, GREEN);
+    LCD_DrawLine(160, 146, 239, 146, BLUE);
+
+    LCD_ShowString(0, 147, "R", RED, BLACK, 16, 0);
+    LCD_ShowString(8, 147, "G", GREEN, BLACK, 16, 0);
+    LCD_ShowString(16, 147, "B", BLUE, BLACK, 16, 0);
+    LCD_ShowString(24, 147, " Type: ", WHITE, BLACK, 16, 0);
+    LCD_ShowString(80, 147, "Disabled", WHITE, BLACK, 16, 0);
+
+    LCD_DrawLine(0, 163, 80, 163, RED);
+    LCD_DrawLine(80, 163, 160, 163, GREEN);
+    LCD_DrawLine(160, 163, 239, 163, BLUE);
+
+    LCD_ShowString(0, 164, " Sunset Light: Disabled", WHITE, BLACK, 16, 0);
+
+    LCD_DrawLine(0, 180, 80, 180, RED);
+    LCD_DrawLine(80, 180, 160, 180, GREEN);
+    LCD_DrawLine(160, 180, 239, 180, BLUE);
+
+    LCD_ShowString(0, 181, "Bedroom Light: Enabled", WHITE, BLACK, 16, 0);
+
+    LCD_DrawLine(0, 197, 80, 197, RED);
+    LCD_DrawLine(80, 197, 160, 197, GREEN);
+    LCD_DrawLine(160, 197, 239, 197, BLUE);
+
+    LCD_Fill(0, 198, 80, 213, RED);
+    LCD_Fill(80, 198, 160, 213, GREEN);
+    LCD_Fill(160, 198, 239, 213, BLUE);
+
+    LCD_ShowString(40, 198 - 1, "R", WHITE, RED, 16, 0);
+    LCD_ShowString(120, 198 - 1, "G", WHITE, GREEN, 16, 0);
+    LCD_ShowString(200, 198 - 1, "B", WHITE, BLUE, 16, 0);
+
+    LCD_DrawLine(0, 214, 239, 214, BLUE);
+    LCD_ShowString(12, 215, "yuangezhizao 2022", BLUE, BLACK, 24, 0);
+    LCD_DrawLine(0, 239, 239, 239, BLUE);
 
     tos_knl_init();
     tos_task_create(&application_task, "application_task", application_entry, NULL, 4, application_task_stk, APPLICATION_TASK_STK_SIZE, 0);
@@ -92,7 +128,6 @@ int main(void)
     case 1:
         break;
     case 2:
-        spi_flash_test();
         break;
     case 3:
         LCD_Fill(0, 0, LCD_W, LCD_H, BLACK);

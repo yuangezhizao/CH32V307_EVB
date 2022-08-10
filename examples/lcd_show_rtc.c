@@ -1,6 +1,7 @@
 //#include "debug.h"
 #include "tos_k.h"
 #include "lcd.h"
+#include "pic.h"
 
 /* Global define */
 
@@ -328,13 +329,44 @@ u8 RTC_Get_Week(u16 year, u8 month, u8 day)
 // }
 
 char rtc_all[22];
+uint8_t num = 0;
+
+void lcd_show_image()
+{
+    if (num == 0)
+    {
+        LCD_ShowPicture(0, 0, 120, 120, gImage_0);
+        LCD_ShowPicture(119, 0, 120, 120, gImage_1);
+    }
+    else if (num == 2)
+    {
+        LCD_ShowPicture(0, 0, 120, 120, gImage_1);
+        LCD_ShowPicture(119, 0, 120, 120, gImage_2);
+    }
+    else if (num == 4)
+    {
+        LCD_ShowPicture(0, 0, 120, 120, gImage_2);
+        LCD_ShowPicture(119, 0, 120, 120, gImage_3);
+    }
+    else if (num == 6)
+    {
+        LCD_ShowPicture(0, 0, 120, 120, gImage_3);
+        LCD_ShowPicture(119, 0, 120, 120, gImage_0);
+    }
+    num++;
+    if (num == 8)
+    {
+        num = 0;
+    }
+}
 
 void lcd_show_RTC()
 {
     while (1)
     {
         sprintf(rtc_all, "%04d-%02d-%02d %02d:%02d:%02d", calendar.w_year, calendar.w_month, calendar.w_date, calendar.hour, calendar.min, calendar.sec);
-        LCD_ShowString(0, 120, rtc_all, GREEN, BLACK, 24, 0);
+        LCD_ShowString(0, 121, rtc_all, GREEN, BLACK, 24, 0);
+        lcd_show_image();
         tos_sleep_ms(500);
     }
 }

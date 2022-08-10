@@ -1,6 +1,6 @@
 #include "debug.h"
 
-extern void sunset_light_init(void)
+void sunset_light_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);

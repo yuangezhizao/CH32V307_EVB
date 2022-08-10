@@ -1,6 +1,6 @@
 #include "debug.h"
 
-extern void TIM6_Init(u16 arr, u16 psc)
+void TIM6_Init(u16 arr, u16 psc)
 {
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 
@@ -39,7 +39,7 @@ void GPIO_Toggle_INIT(void)
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 }
 
-extern void user_led_1_toggle(void *arg)
+void user_led_1_toggle(void *arg)
 {
     GPIO_Toggle_INIT();
     TIM6_Init(5000 - 1, 14400 - 1);

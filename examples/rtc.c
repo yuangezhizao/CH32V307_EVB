@@ -55,7 +55,7 @@ static void RTC_NVIC_Config(void)
  * @return  1 - Init Fail
  *          0 - Init Success
  */
-extern u8 RTC_Init(void)
+u8 RTC_Init(void)
 {
     u8 temp = 0;
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
@@ -329,7 +329,7 @@ u8 RTC_Get_Week(u16 year, u8 month, u8 day)
 
 char rtc_all[22];
 
-extern void lcd_show_RTC()
+void lcd_show_RTC()
 {
     while (1)
     {

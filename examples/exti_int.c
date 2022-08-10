@@ -58,7 +58,7 @@ void exti_1_int_init(void)
 //     EXTI_Init(&EXTI_InitStructure);
 // }
 
-extern void exti_int_init(void)
+void exti_int_init(void)
 {
     key_234_gpio_init();
     exti_0_int_init();

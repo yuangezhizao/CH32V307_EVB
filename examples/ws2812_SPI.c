@@ -2,7 +2,7 @@
 
 // int8_t i;
 
-extern void ws2812_spi(void)
+void ws2812_spi(void)
 {
     ws281x_init();
     while (1)

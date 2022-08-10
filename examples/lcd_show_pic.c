@@ -1,7 +1,7 @@
 #include "debug.h"
 #include "pic.h"
 
-extern void lcd_show_image(void *arg)
+void lcd_show_image(void *arg)
 {
     // u8 i, j;
     // float t = 0;

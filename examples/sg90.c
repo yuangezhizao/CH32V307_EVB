@@ -36,19 +36,19 @@ void TIM4_PWMOut_init(void)
     TIM_Cmd(TIM4, ENABLE);                             //使能TIM1
 }
 
-extern void sg90_init()
+void sg90_init()
 {
     TIM4_PWMOut_init();
 }
 
-extern void turn_on_bedroom_light()
+void turn_on_bedroom_light()
 {
     TIM_SetCompare1(TIM4, 188);
     //    tos_sleep_ms(1000);
     //    TIM_SetCompare1(TIM4, 185); // 90度
 }
 
-extern void turn_off_bedroom_light()
+void turn_off_bedroom_light()
 {
     TIM_SetCompare1(TIM4, 182);
     //    tos_sleep_ms(1000);

@@ -16,6 +16,7 @@
 
 // 数据模板
 #define REPORT_LX_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"lx\\\":%.0f}}"
+#define REPORT_BEDROOM_LIGHT_SWITCH_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"bedroom_light_switch\\\":%d}}"
 #define REPORT_SUNSET_LIGHT_SWITCH_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"sunset_light_switch\\\":%d}}"
 #define REPORT_BRIGHTNESS_LEVEL_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"brightness_level\\\":%d}}"
 #define CONTROL_REPLY_DATA_TEMPLATE "{\\\"method\\\":\\\"control_reply\\\"\\,\\\"clientToken\\\":\\\"%s\\\"\\,\\\"code\\\":0\\,\\\"status\\\":\\\"ok\\\"}"
@@ -30,10 +31,12 @@ char payload[256] = {0};
 static char report_topic_name[TOPIC_NAME_MAX_SIZE] = {0};
 static char report_reply_topic_name[TOPIC_NAME_MAX_SIZE] = {0};
 
+static bool is_bedroom_light_switch_changed = true;
 static bool is_sunset_light_switch_changed = true;
 static bool is_brightness_level_changed = true;
 static bool is_client_token_received = false;
 
+int bedroom_light_switch_cache = 0;
 int sunset_light_switch_cache = 0;
 int brightness_level_cache = 2;
 char client_token_cache[128] = {0};
@@ -58,10 +61,21 @@ char client_token_cache[128] = {0};
 //     is_power_switch_changed = true;
 // }
 
-/***************************************************************
- * 函数名称: iot_explorer_handle_power_switch
- * 说    明: 根据power switch控制开关
- ***************************************************************/
+static void iot_explorer_handle_bedroom_light_switch(int bedroom_light_switch)
+{
+    bedroom_light_switch_cache = bedroom_light_switch;
+
+    if (bedroom_light_switch == 1)
+    {
+        turn_on_bedroom_light();
+    }
+    else
+    {
+        turn_off_bedroom_light();
+    }
+    is_bedroom_light_switch_changed = true;
+}
+
 static void iot_explorer_handle_sunset_light_switch(int sunset_light_switch)
 {
     sunset_light_switch_cache = sunset_light_switch;
@@ -69,28 +83,28 @@ static void iot_explorer_handle_sunset_light_switch(int sunset_light_switch)
     if (sunset_light_switch == 1)
     {
         if (SUNSET_LIGHT_IS_OPEN)
-         {
+        {
             printf("the light already open\r\n");
-         }
-         else
-         {
-             printf("iot-explorer open the light\r\n");
-             OPEN_SUNSET_LIGHT;
-             is_sunset_light_switch_changed = true;
-         }
+        }
+        else
+        {
+            printf("iot-explorer open the light\r\n");
+            OPEN_SUNSET_LIGHT;
+            is_sunset_light_switch_changed = true;
+        }
     }
     else
     {
         if (SUNSET_LIGHT_IS_OPEN)
-         {
-             printf("iot-explorer close the light\r\n");
-             CLOSE_SUNSET_LIGHT;
-             is_sunset_light_switch_changed = true;
-         }
-         else
-         {
-             printf("the light already closed\r\n");
-         }
+        {
+            printf("iot-explorer close the light\r\n");
+            CLOSE_SUNSET_LIGHT;
+            is_sunset_light_switch_changed = true;
+        }
+        else
+        {
+            printf("the light already closed\r\n");
+        }
     }
 }
 
@@ -104,6 +118,7 @@ static void default_message_handler(mqtt_message_t *msg)
     cJSON *params;
     cJSON *token;
     cJSON *method;
+    cJSON *bedroom_light_switch;
     cJSON *sunset_light_switch;
     cJSON *RGB_color;
     cJSON *RGB_brightness;
@@ -148,13 +163,18 @@ static void default_message_handler(mqtt_message_t *msg)
         return;
     }
 
-    // 1. 解析出 sunset_light_switch
+    // 1. sunset_light_switch
     sunset_light_switch = cJSON_GetObjectItem(params, "sunset_light_switch");
-
-    // 2. 根据 sunset_light_switch控制实际硬件开关
     if (sunset_light_switch)
     {
         iot_explorer_handle_sunset_light_switch(sunset_light_switch->valueint);
+    }
+
+    // 2. bedroom_light_switch
+    bedroom_light_switch = cJSON_GetObjectItem(params, "bedroom_light_switch");
+    if (bedroom_light_switch)
+    {
+        iot_explorer_handle_bedroom_light_switch(bedroom_light_switch->valueint);
     }
 
     RGB_brightness = cJSON_GetObjectItem(params, "RGB_brightness");
@@ -264,15 +284,15 @@ extern void mqtt_task(void)
     {
         tos_sleep_ms(5000);
 
-         // 判断当前IoT Explorer连接状态
-         mqtt_state_t state;
-         tos_tf_module_mqtt_state_get(&state);
-         if (state == MQTT_STATE_DISCONNECTED)
-         {
-             printf("mqtt is disconnected\r\n");
-             tos_sleep_ms(5000);
-             continue;
-         }
+        // 判断当前IoT Explorer连接状态
+        mqtt_state_t state;
+        tos_tf_module_mqtt_state_get(&state);
+        if (state == MQTT_STATE_DISCONNECTED)
+        {
+            printf("mqtt is disconnected\r\n");
+            tos_sleep_ms(5000);
+            continue;
+        }
 
         // // 读取光照强度，数据存放在 e53_value
         // e53_value = e53_scl_read_data();
@@ -282,22 +302,38 @@ extern void mqtt_task(void)
         // sprintf(e53_str, "%.0f lx(lm/m2)", e53_value);
         // OLED_ShowString(0, 2, (uint8_t *)e53_str, 16);
 
-         // 如果开关状态改变，需要上报给平台以同步
-         if (is_sunset_light_switch_changed)
-         {
-             is_sunset_light_switch_changed = false;
-             memset(payload, 0, sizeof(payload));
-             snprintf(payload, sizeof(payload), REPORT_SUNSET_LIGHT_SWITCH_DATA_TEMPLATE, sunset_light_switch_cache);
+        // 如果开关状态改变，需要上报给平台以同步
+        if (is_sunset_light_switch_changed)
+        {
+            is_sunset_light_switch_changed = false;
+            memset(payload, 0, sizeof(payload));
+            snprintf(payload, sizeof(payload), REPORT_SUNSET_LIGHT_SWITCH_DATA_TEMPLATE, sunset_light_switch_cache);
 
-             if (tos_tf_module_mqtt_pub(report_topic_name, QOS0, payload) != 0)
-             {
-                 printf("module mqtt pub fail\n");
-             }
-             else
-             {
-                 printf("module mqtt pub success\n");
-             }
-         }
+            if (tos_tf_module_mqtt_pub(report_topic_name, QOS0, payload) != 0)
+            {
+                printf("module mqtt pub fail\n");
+            }
+            else
+            {
+                printf("module mqtt pub success\n");
+            }
+        }
+
+        if (is_bedroom_light_switch_changed)
+        {
+            is_bedroom_light_switch_changed = false;
+            memset(payload, 0, sizeof(payload));
+            snprintf(payload, sizeof(payload), REPORT_BEDROOM_LIGHT_SWITCH_DATA_TEMPLATE, bedroom_light_switch_cache);
+
+            if (tos_tf_module_mqtt_pub(report_topic_name, QOS0, payload) != 0)
+            {
+                printf("module mqtt pub fail\n");
+            }
+            else
+            {
+                printf("module mqtt pub success\n");
+            }
+        }
 
         // // 扩展实验2：请在此处添加亮度等级状态上报物联网开发平台的代码
         // if (is_brightness_level_changed)

@@ -44,15 +44,15 @@ extern void sg90_init()
 extern void turn_on_bedroom_light()
 {
     TIM_SetCompare1(TIM4, 188);
-    tos_sleep_ms(500);
-    TIM_SetCompare1(TIM4, 185); // 90度
+    //    tos_sleep_ms(1000);
+    //    TIM_SetCompare1(TIM4, 185); // 90度
 }
 
 extern void turn_off_bedroom_light()
 {
     TIM_SetCompare1(TIM4, 182);
-    tos_sleep_ms(500);
-    TIM_SetCompare1(TIM4, 185); // 90度
+    //    tos_sleep_ms(1000);
+    //    TIM_SetCompare1(TIM4, 185); // 90度
 }
 
 // void application_entry(void *arg)

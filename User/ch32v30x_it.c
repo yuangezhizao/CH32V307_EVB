@@ -106,10 +106,10 @@ void UART7_IRQHandler(void)
  * @return  none
  */
 
-volatile uint16_t User_LED_1_Status = 0;
-volatile uint16_t User_LED_2_Status = 0;
-volatile uint16_t User_LED_3_Status = 0;
-//volatile uint16_t User_LED_4_Status = 0;
+volatile uint8_t User_LED_1_Status = 0;
+volatile uint8_t User_LED_2_Status = 0;
+//volatile uint8_t User_LED_4_Status = 0;
+volatile uint8_t sunset_light_status;
 
 void EXTI0_IRQHandler(void)
 {
@@ -130,6 +130,10 @@ void EXTI0_IRQHandler(void)
   }
 }
 
+#define OPEN_SUNSET_LIGHT GPIO_SetBits(GPIOC, GPIO_Pin_10)
+#define CLOSE_SUNSET_LIGHT GPIO_ResetBits(GPIOC, GPIO_Pin_10)
+#define SUNSET_LIGHT_IS_OPEN GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_10)
+
 void EXTI1_IRQHandler(void)
 {
   if (EXTI_GetITStatus(EXTI_Line1) != RESET)
@@ -139,8 +143,12 @@ void EXTI1_IRQHandler(void)
 
 #endif
     EXTI_ClearITPendingBit(EXTI_Line1); /* Clear Flag */
-    User_LED_3_Status = !User_LED_3_Status;
-    GPIO_WriteBit(GPIOE, GPIO_Pin_4, User_LED_3_Status);
+    if (SUNSET_LIGHT_IS_OPEN) {
+        CLOSE_SUNSET_LIGHT;
+    } else {
+        OPEN_SUNSET_LIGHT;
+    }
+    GPIO_WriteBit(GPIOE, GPIO_Pin_4, !SUNSET_LIGHT_IS_OPEN);
   }
 }
 

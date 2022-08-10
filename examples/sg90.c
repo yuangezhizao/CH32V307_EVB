@@ -50,7 +50,6 @@ extern void turn_on_bedroom_light()
 
 extern void turn_off_bedroom_light()
 {
-
     TIM_SetCompare1(TIM4, 182);
     Delay_Ms(500);
     TIM_SetCompare1(TIM4, 185); // 90度

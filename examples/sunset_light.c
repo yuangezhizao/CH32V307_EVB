@@ -1,6 +1,8 @@
 #include "tos_k.h"
 
-extern void init_e53_sc1_light(void)
+
+
+extern void sunset_light_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
@@ -10,14 +12,15 @@ extern void init_e53_sc1_light(void)
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
 
+
 // void application_entry(void *arg)
 // {
-//     init_e53_sc1_light();
+//     sunset_light_init();
 //     while (1)
 //     {
-//         GPIO_SetBits(GPIOC, GPIO_Pin_10);
+//         turn_on_sunset_light();
 //         Delay_Ms(1000);
-//         GPIO_ResetBits(GPIOC, GPIO_Pin_10);
+//         turn_off_sunset_light();
 //         Delay_Ms(1000);
 //     }
 // }

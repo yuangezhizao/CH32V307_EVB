@@ -8,6 +8,7 @@
 #include "ch32v30x_it.h"
 #include "tos_k.h"
 #include "tos_at.h"
+#include "lcd.h"
 extern at_agent_t esp8266_tf_agent;
 // extern at_agent_t esp8266_agent;
 
@@ -126,10 +127,12 @@ void EXTI0_IRQHandler(void)
     if (User_LED_2_Status == 0)
     {
       turn_on_bedroom_light();
+      LCD_ShowString(120, 181, "Enabled ", PINK, BLACK, 16, 0);
     }
     else
     {
       turn_off_bedroom_light();
+      LCD_ShowString(120, 181, "Disabled", BROWN, BLACK, 16, 0);
     }
   }
 }
@@ -150,10 +153,12 @@ void EXTI1_IRQHandler(void)
     if (SUNSET_LIGHT_IS_OPEN)
     {
       CLOSE_SUNSET_LIGHT;
+      LCD_ShowString(120, 164, "Disabled", BROWN, BLACK, 16, 0);
     }
     else
     {
       OPEN_SUNSET_LIGHT;
+      LCD_ShowString(120, 164, "Enabled ", PINK, BLACK, 16, 0);
     }
     GPIO_WriteBit(GPIOE, GPIO_Pin_4, !SUNSET_LIGHT_IS_OPEN);
   }

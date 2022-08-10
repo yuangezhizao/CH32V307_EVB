@@ -89,13 +89,15 @@ int main(void)
     LCD_DrawLine(80, 163, 160, 163, GREEN);
     LCD_DrawLine(160, 163, 239, 163, BLUE);
 
-    LCD_ShowString(0, 164, " Sunset Light: Disabled", WHITE, BLACK, 16, 0);
+    LCD_ShowString(0, 164, "Sunset  Light: ", WHITE, BLACK, 16, 0);
+    LCD_ShowString(120, 164, "Disabled", BROWN, BLACK, 16, 0);
 
     LCD_DrawLine(0, 180, 80, 180, RED);
     LCD_DrawLine(80, 180, 160, 180, GREEN);
     LCD_DrawLine(160, 180, 239, 180, BLUE);
 
-    LCD_ShowString(0, 181, "Bedroom Light: Enabled", WHITE, BLACK, 16, 0);
+    LCD_ShowString(0, 181, "Bedroom Light: ", WHITE, BLACK, 16, 0);
+    LCD_ShowString(120, 181, "Enabled ", PINK, BLACK, 16, 0);
 
     LCD_DrawLine(0, 197, 80, 197, RED);
     LCD_DrawLine(80, 197, 160, 197, GREEN);

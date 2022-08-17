@@ -109,6 +109,7 @@ static void iot_explorer_handle_sunset_light_switch(int sunset_light_switch)
             printf("the light already closed\r\n");
         }
     }
+    is_sunset_light_switch_changed = true;
 }
 
 static void iot_explorer_handle_rgb_light_type(int rgb_light_type)
@@ -143,7 +144,6 @@ static void iot_explorer_handle_rgb_light_type(int rgb_light_type)
     {
         printf("Unknown type\r\n");
     }
-    is_bedroom_light_switch_changed = true;
 }
 
 /***************************************************************

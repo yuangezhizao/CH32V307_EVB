@@ -15,13 +15,13 @@
 #define YOUR_WIFI_PWD ""
 
 // 数据模板
-#define REPORT_LX_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"lx\\\":%.0f}}"
+//#define REPORT_LX_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"lx\\\":%.0f}}"
 #define REPORT_BEDROOM_LIGHT_SWITCH_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"bedroom_light_switch\\\":%d}}"
 #define REPORT_SUNSET_LIGHT_SWITCH_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"sunset_light_switch\\\":%d}}"
-#define REPORT_BRIGHTNESS_LEVEL_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"brightness_level\\\":%d}}"
+//#define REPORT_BRIGHTNESS_LEVEL_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"brightness_level\\\":%d}}"
 #define CONTROL_REPLY_DATA_TEMPLATE "{\\\"method\\\":\\\"control_reply\\\"\\,\\\"clientToken\\\":\\\"%s\\\"\\,\\\"code\\\":0\\,\\\"status\\\":\\\"ok\\\"}"
 
-#define REPORT_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"RGB_brightness\\\":%d\\,\\\"name\\\":\\\"bedroom\\\"}}"
+//#define REPORT_DATA_TEMPLATE "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"RGB_brightness\\\":%d\\,\\\"name\\\":\\\"bedroom\\\"}}"
 
 #define OPEN_SUNSET_LIGHT GPIO_SetBits(GPIOC, GPIO_Pin_10)
 #define CLOSE_SUNSET_LIGHT GPIO_ResetBits(GPIOC, GPIO_Pin_10)
@@ -33,13 +33,13 @@ static char report_reply_topic_name[TOPIC_NAME_MAX_SIZE] = {0};
 
 static bool is_bedroom_light_switch_changed = true;
 static bool is_sunset_light_switch_changed = true;
-static bool is_brightness_level_changed = true;
+// static bool is_brightness_level_changed = true;
 static bool is_client_token_received = false;
 
 int bedroom_light_switch_cache = 0;
 int sunset_light_switch_cache = 0;
 int rgb_light_type_cache = 0;
-int brightness_level_cache = 2;
+// int brightness_level_cache = 2;
 char client_token_cache[128] = {0};
 
 extern rgb_data_msg_q;
@@ -114,27 +114,33 @@ static void iot_explorer_handle_sunset_light_switch(int sunset_light_switch)
 static void iot_explorer_handle_rgb_light_type(int rgb_light_type)
 {
     rgb_light_type_cache = rgb_light_type;
-    if (rgb_light_type == 0){
+    if (rgb_light_type == 0)
+    {
         char *msg_to_one_receiver = "color_wipe";
         tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
     }
-    else if (rgb_light_type == 1) {
+    else if (rgb_light_type == 1)
+    {
         char *msg_to_one_receiver = "theater_chase";
         tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
     }
-    else if (rgb_light_type == 2) {
+    else if (rgb_light_type == 2)
+    {
         char *msg_to_one_receiver = "rainbow";
         tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
     }
-    else if (rgb_light_type == 3) {
+    else if (rgb_light_type == 3)
+    {
         char *msg_to_one_receiver = "rainbow_cycle";
         tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
     }
-    else if (rgb_light_type == 4) {
+    else if (rgb_light_type == 4)
+    {
         char *msg_to_one_receiver = "theater_chase_rain";
         tos_msg_q_post(&rgb_data_msg_q, msg_to_one_receiver);
     }
-    else{
+    else
+    {
         printf("Unknown type\r\n");
     }
     is_bedroom_light_switch_changed = true;
@@ -209,21 +215,21 @@ static void default_message_handler(mqtt_message_t *msg)
         iot_explorer_handle_bedroom_light_switch(bedroom_light_switch->valueint);
     }
 
-    // 2. rgb_light_type
+    // 3. rgb_light_type
     rgb_light_type = cJSON_GetObjectItem(params, "rgb_light_type");
     if (rgb_light_type)
     {
         iot_explorer_handle_rgb_light_type(rgb_light_type->valueint);
     }
 
-    RGB_brightness = cJSON_GetObjectItem(params, "RGB_brightness");
-    if (RGB_brightness)
-    {
-        printf("RGB_brightness: %d", RGB_brightness);
-        // e53_sc1_set_ligth_level(brightness_level->valueint);
-        //        brightness_level_cache = brightness_level->valueint;
-        is_brightness_level_changed = true;
-    }
+    //    RGB_brightness = cJSON_GetObjectItem(params, "RGB_brightness");
+    //    if (RGB_brightness)
+    //    {
+    //        printf("RGB_brightness: %d", RGB_brightness);
+    //        // e53_sc1_set_ligth_level(brightness_level->valueint);
+    //        //        brightness_level_cache = brightness_level->valueint;
+    //        is_brightness_level_changed = true;
+    //    }
 
     // 4. 设置clientToken回复
     token = cJSON_GetObjectItem(root, "clientToken");
@@ -249,7 +255,7 @@ extern void mqtt_task(void)
 {
     int ret = 0;
     int size = 0;
-    int RGB_brightness = 0;
+//    int RGB_brightness = 0;
     mqtt_state_t state;
 
     char *product_id = PRODUCT_ID;
@@ -401,14 +407,14 @@ extern void mqtt_task(void)
 
         /* use AT+PUB AT command */
 
-        memset(payload, 0, sizeof(payload));
-        snprintf(payload, sizeof(payload), REPORT_DATA_TEMPLATE, RGB_brightness++);
-
-        if (RGB_brightness > 100)
-        {
-            RGB_brightness = 0;
-        }
-
+        //        memset(payload, 0, sizeof(payload));
+        //        snprintf(payload, sizeof(payload), REPORT_DATA_TEMPLATE, RGB_brightness++);
+        //
+        //        if (RGB_brightness > 100)
+        //        {
+        //            RGB_brightness = 0;
+        //        }
+        //
         if (tos_tf_module_mqtt_pub(report_topic_name, QOS0, payload) != 0)
         {
             printf("module mqtt pub fail\n");

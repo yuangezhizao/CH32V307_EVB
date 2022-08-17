@@ -43,14 +43,14 @@ void sg90_init()
 
 void turn_on_bedroom_light()
 {
-    TIM_SetCompare1(TIM4, 188);
-    //    tos_sleep_ms(1000);
-    //    TIM_SetCompare1(TIM4, 185); // 90度
+    TIM_SetCompare1(TIM4, 187);
+//    tos_sleep_ms(1000);
+//    TIM_SetCompare1(TIM4, 185); // 90度
 }
 
 void turn_off_bedroom_light()
 {
-    TIM_SetCompare1(TIM4, 182);
+    TIM_SetCompare1(TIM4, 183);
     //    tos_sleep_ms(1000);
     //    TIM_SetCompare1(TIM4, 185); // 90度
 }
